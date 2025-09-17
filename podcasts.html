@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STARK's PODCASTS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .podcast {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .podcast h2 {
+      margin: 0 0 10px;
+    }
+    .podcast p {
+      margin: 0 0 15px;
+      color: #555;
+    }
+    audio {
+      width: 100%;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎙 STARK's PODCASTS</h1>
+  <div id="podcast-list"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3lI8mHOS266ltt9XB502cPYWikjVapZs",
+      authDomain: "podcasts-6bb4d.firebaseapp.com",
+      projectId: "podcasts-6bb4d",
+      storageBucket: "podcasts-6bb4d.firebasestorage.app",
+      messagingSenderId: "1020552001610",
+      appId: "1:1020552001610:web:a12ae6c7f2bc2889380eb3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const podcastList = document.getElementById("podcast-list");
+
+    async function loadPodcasts() {
+      const q = query(collection(db, "podcasts"));
+      const querySnapshot = await getDocs(q);
+      const podcasts = [];
+
+      querySnapshot.forEach(doc => {
+        podcasts.push(doc.data());
+      });
+
+      podcasts.reverse().forEach(podcast => {
+        const el = document.createElement("div");
+        el.className = "podcast";
+        el.innerHTML = `
+          <h2>${podcast.titre}</h2>
+          <p>${podcast.desc}</p>
+          <audio controls src="${podcast.url}"></audio>
+        `;
+        podcastList.appendChild(el);
+      });
+    }
+
+    loadPodcasts();
+  </script>
+</body>
+</html>
+
+    
+    
+    
+    
