@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>starks-podcasts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+    }
+
+    header {
+      background: url('https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+      height: 100vh;
+      color: white;
+      position: relative;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(0, 0, 0, 0.4);
+      position: absolute;
+      width: 100%;
+      top: 0;
+    }
+
+    nav .logo {
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hero {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .hero .btn {
+      padding: 10px 25px;
+      border: 2px solid white;
+      color: white;
+      background: transparent;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .hero .btn:hover {
+      background: white;
+      color: black;
+    }
+
+    .audio-player {
+      background: #222;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-top: 40px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+    }
+    .footer {
+  background-color: #3c3db8; /* bleu violet */
+  color: #fff;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 20px;
+}
+
+.footer-column {
+    flex: 1;
+  min-width: 250px;
+}
+
+.footer-column h3 {
+  color: #ffcb05;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #50e3c2;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-column p,
+.footer-column a {
+  color: #e0e0e0;
+  font-size: 15px;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">STARK's PODCASTS</div>
+      <ul>
+        <li><a href="">HOME</a></li>
+        <li><a href="">ABOUT</a></li>
+        <li><a href="">MUSIC</a></li>
+        <li><a href="">CONTACT</a></li>
+        <li> <a href="tips.html">Conseils</a></li>
+       
+      </ul>
+    </nav>
+    <div class="hero">
+    <h1>STARK's PODCASTS</h1>
+      <p>Singer – Songwriter – Producer</p>
+      <button class="btn">LISTEN NOW</button>
+
+      <div class="audio-player">
+        <p>Track Title</p>
+        <audio controls>
+          <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </header>
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>À propos</h3>
+      <p>
+        Stark's Podcasts est une plateforme qui partage inspiration, conseils et créativité.
+      </p>
+    </div>
+    <div class="footer-column">
+      <h3>Liens rapides</h3>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="podcasts.html">Podcasts</a></li>
+        <li><a href="tips.html">Conseils</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>Contact</h3>
+      <p>📧 contact@starkspodcasts.com</p>
+      <p>📞 +243 999 000 000</p>
+      <p>📍 Kinshasa, RDC</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
