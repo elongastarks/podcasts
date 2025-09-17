@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Podcasts & Tips</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    select, input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+     border-radius: 5px;
+      cursor: pointer;
+      background: #eee;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ADMIN</h1>
+    <select id="collection">
+      <option value="tips">Tips</option>
+      <option value="podcasts">Podcasts</option>
+    </select>
+    <input type="text" id="docId" placeholder="Doc ID">
+    <input type="text" id="title" placeholder="Titre">
+    <textarea id="desc" placeholder="Description"></textarea>
+    <input type="text" id="url" placeholder="URL (Seulement pour Podcasts)">
+
+    <div class="btn-group">
+      <button id="addBtn">Add</button>
+      <button id="selectBtn">Select</button>
+      <button id="updateBtn">Update</button>
+      <button id="deleteBtn">Delete</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3lI8mHOS266ltt9XB502cPYWikjVapZs",
+      authDomain: "podcasts-6bb4d.firebaseapp.com",
+      projectId: "podcasts-6bb4d",
+storageBucket: "podcasts-6bb4d.firebasestorage.app",
+      messagingSenderId: "1020552001610",
+      appId: "1:1020552001610:web:a12ae6c7f2bc2889380eb3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const collection = document.getElementById("collection");
+    const docId = document.getElementById("docId");
+    const title = document.getElementById("title");
+    const desc = document.getElementById("desc");
+    const url = document.getElementById("url");
+
+    function getData() {
+      const data = {
+        titre: title.value,
+        desc: desc.value
+      };
+      if (collection.value === "podcasts") data.url = url.value;
+      return data;
+    }
+
+    function fillFields(data) {
+      title.value = data.titre || "";
+      desc.value = data.desc || "";
+      url.value = data.url || "";
+    }
+
+    document.getElementById("addBtn").onclick = async () => {
+      if (!docId.value) return alert("ID requis");
+      await setDoc(doc(db, collection.value, docId.value), getData());
+      alert("Ajouté");
+    };
+
+    document.getElementById("selectBtn").onclick = async () => {
+      if (!docId.value) return alert("ID requis");
+      const ref = doc(db, collection.value, docId.value);
+      const snap = await getDoc(ref);
+if (snap.exists()) {
+        fillFields(snap.data());
+      } else {
+        alert("Pas trouvé");
+      }
+    };
+
+    document.getElementById("updateBtn").onclick = async () => {
+      if (!docId.value) return alert("ID requis");
+      await updateDoc(doc(db, collection.value, docId.value), getData());
+      alert("Modifié");
+    };
+
+    document.getElementById("deleteBtn").onclick = async () => {
+      if (!docId.value) return alert("ID requis");
+      await deleteDoc(doc(db, collection.value, docId.value));
+      title.value = "";
+      desc.value = "";
+      url.value = "";
+      alert("Supprimé");
+    };
+
+    // Cacher champ URL si "tips" est sélectionné
+    collection.onchange = () => {
+      url.style.display = collection.value === "podcasts" ? "block" : "none";
+    };
+    collection.onchange(); // Initialiser affichage
+  </script>
+</body>
+</html>
