@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tips - Conseils</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f0f4f5;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .tip {
+      background: white;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .tip h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      color: #222;
+    }
+    .tip p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .footer {
+  background-color: #3c3db8; /* bleu violet */
+  color: #fff;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 20px;
+}
+
+.footer-column {
+    flex: 1;
+  min-width: 250px;
+}
+
+.footer-column h3 {
+  color: #ffcb05;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #50e3c2;
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.footer-column p,
+.footer-column a {
+  color: #e0e0e0;
+  font-size: 15px;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+  </style>
+</head>
+<body>
+  <h1>💡 Conseils / Tips</h1>
+  <div id="tips-container"></div>
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>Liens rapides</h3>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="podcasts.html">Podcasts</a></li>
+        <li><a href="tips.html">Conseils</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3lI8mHOS266ltt9XB502cPYWikjVapZs",
+      authDomain: "podcasts-6bb4d.firebaseapp.com",
+      projectId: "podcasts-6bb4d",
+      storageBucket: "podcasts-6bb4d.firebasestorage.app",
+      messagingSenderId: "1020552001610",
+      appId: "1:1020552001610:web:a12ae6c7f2bc2889380eb3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const tipsContainer = document.getElementById("tips-container");
+
+    const loadTips = async () => {
+      const querySnapshot = await getDocs(collection(db, "tips"));
+      tipsContainer.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const tip = doc.data();
+        const div = document.createElement("div");
+        div.className = "tip";
+        div.innerHTML = `<h3>${tip.titre}</h3><p>${tip.desc}</p>`;
+        tipsContainer.appendChild(div);
+      });
+    };
+
+    loadTips();
+  </script>
+</body>
+</html>
