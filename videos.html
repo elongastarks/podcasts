@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vidéos Podcasts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      background: #f9f9f9;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .video-card {
+      background: white;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    iframe {
+      width: 100%;
+      height: 315px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .titre {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 768px) {
+      iframe {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Vidéos Podcasts</h1>
+<div id="videosContainer"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+const firebaseConfig = {
+    apiKey: "AIzaSyA3lI8mHOS266ltt9XB502cPYWikjVapZs",
+    authDomain: "podcasts-6bb4d.firebaseapp.com",
+    projectId: "podcasts-6bb4d",
+    storageBucket: "podcasts-6bb4d.firebasestorage.app",
+    messagingSenderId: "1020552001610",
+    appId: "1:1020552001610:web:a12ae6c7f2bc2889380eb3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const container = document.getElementById("videosContainer");
+
+  async function afficherVideos() {
+    const q = query(collection(db, "videos"), orderBy("Date", "desc"));
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach(doc => {
+      const data = doc.data();
+      const div = document.createElement("div");
+      div.className = "video-card";
+      div.innerHTML = `
+        <div class="titre">${data.titre || "Titre inconnu"}</div>
+        <iframe src="${data.url}" allowfullscreen></iframe>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  afficherVideos();
+</script>
+
+</body>
+</html>
+
