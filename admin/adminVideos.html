@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestion Vidéos</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f2f2f2; }
+    .container { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    label, input, button { display: block; width: 100%; margin-bottom: 12px; }
+    input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 10px; border: none; border-radius: 4px; background: #007BFF; color: white; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #msg { color: green; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Gestion des vidéos</h2>
+    <label for="docId">ID du document :</label>
+    <input type="text" id="docId" placeholder="Entrez l’ID (sélection)" />
+
+    <label for="titre">Titre :</label>
+<input type="text" id="titre" placeholder="Titre de la vidéo" />
+
+    <label for="url">URL (iframe) :</label>
+    <input type="text" id="url" placeholder="https://www.youtube.com/embed/..." />
+
+    <button id="btnAdd">Ajouter</button>
+    <button id="btnSelect">Sélectionner</button>
+    <button id="btnUpdate">Mettre à jour</button>
+    <button id="btnDelete">Supprimer</button>
+
+    <p id="msg"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA3lI8mHOS266ltt9XB502cPYWikjVapZs",
+      authDomain: "podcasts-6bb4d.firebaseapp.com",
+      projectId: "podcasts-6bb4d",
+      storageBucket: "podcasts-6bb4d.firebasestorage.app",
+      messagingSenderId: "1020552001610",
+      appId: "1:1020552001610:web:a12ae6c7f2bc2889380eb3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const colVideos = collection(db, "videos");
+
+    const docIdInput = document.getElementById("docId");
+    const titreInput = document.getElementById("titre");
+const urlInput = document.getElementById("url");
+    const msg = document.getElementById("msg");
+
+    document.getElementById("btnAdd").onclick = async () => {
+      const titre = titreInput.value.trim();
+      const url = urlInput.value.trim();
+      if (!titre || !url) {
+        msg.textContent = "Titre et URL obligatoires pour ajouter.";
+        return;
+      }
+      try {
+        await addDoc(colVideos, {
+          titre,
+          url,
+          Date: serverTimestamp()
+        });
+        msg.textContent = "Vidéo ajoutée avec succès.";
+        titreInput.value = "";
+        urlInput.value = "";
+      } catch (e) {
+        msg.textContent = "Erreur ajout : " + e.message;
+      }
+    };
+
+    document.getElementById("btnSelect").onclick = async () => {
+      const id = docIdInput.value.trim();
+      if (!id) {
+        msg.textContent = "ID requis pour sélectionner.";
+        return;
+      }
+      try {
+        const d = await getDoc(doc(db, "videos", id));
+        if (!d.exists()) {
+          msg.textContent = "Document non trouvé.";
+          return;
+        }
+        const data = d.data();
+        titreInput.value = data.titre || "";
+        urlInput.value = data.url || "";
+        msg.textContent = "Données chargées.";
+      } catch (e) {
+msg.textContent = "Erreur sélection : " + e.message;
+      }
+    };
+
+    document.getElementById("btnUpdate").onclick = async () => {
+      const id = docIdInput.value.trim();
+      if (!id) {
+        msg.textContent = "ID requis pour mettre à jour.";
+        return;
+      }
+      try {
+        const ref = doc(db, "videos", id);
+        await updateDoc(ref, {
+          titre: titreInput.value.trim(),
+          url: urlInput.value.trim(),
+          Date: serverTimestamp()
+        });
+        msg.textContent = "Mise à jour réussie.";
+      } catch (e) {
+        msg.textContent = "Erreur mise à jour : " + e.message;
+      }
+    };
+
+    document.getElementById("btnDelete").onclick = async () => {
+      const id = docIdInput.value.trim();
+      if (!id) {
+        msg.textContent = "ID requis pour supprimer.";
+        return;
+      }
+      try {
+        await deleteDoc(doc(db, "videos", id));
+        msg.textContent = "Vidéo supprimée.";
+        titreInput.value = "";
+        urlInput.value = "";
+        docIdInput.value = "";
+      } catch (e) {
+        msg.textContent = "Erreur suppression : " + e.message;
+      }
+    };
+  </script>
+</body>
+</html>
